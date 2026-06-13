@@ -1,0 +1,1584 @@
+/* =============================================================================
+   ROMI Clínica · App-wide doodle skin
+   Aplica la estética hand-drawn/blob/Headspace a toda la aplicación.
+   Importado en main.jsx después de global.css para sobrescribirlo.
+   No se aplica al .home-page (landing tiene su propio skin que ya cubre todo).
+   ============================================================================= */
+
+:root {
+  --doodle-cream: #fdf6ec;
+  --doodle-paper: #ffffff;
+  --doodle-ink: #1a1a1a;
+  --doodle-ink-soft: #2a2a2a;
+  --doodle-muted: #5a5a5a;
+
+  --doodle-yellow: #ffd972;
+  --doodle-butter: #fff1c2;
+  --doodle-lilac: #c8b6ff;
+  --doodle-lilac-soft: #ebe5ff;
+  --doodle-peach: #ffb4a2;
+  --doodle-peach-soft: #ffe5dd;
+  --doodle-pink: #ffafcc;
+  --doodle-pink-soft: #ffe1ed;
+  --doodle-mint: #a8e6cf;
+  --doodle-mint-soft: #d9f5e8;
+  --doodle-blue: #5b8def;
+  --doodle-blue-soft: #dde8ff;
+  --doodle-hot: #ff5c7c;
+
+  /* Sobrescribir tokens semánticos del design system base */
+  --primary: var(--doodle-ink);
+  --accent: var(--doodle-hot);
+  --bg: var(--doodle-cream);
+  --surface: var(--doodle-paper);
+  --text-primary: var(--doodle-ink);
+  --text: var(--doodle-ink);
+  --text-muted: var(--doodle-muted);
+  --border: #1a1a1a;
+  --focus: var(--doodle-hot);
+
+  --shadow-1: 3px 3px 0 var(--doodle-ink);
+  --shadow-2: 5px 5px 0 var(--doodle-ink);
+
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 24px;
+}
+
+/* =============================================================================
+   DARK MODE — warm dark con doodle ink claro
+   Mantenemos la paleta de acento (yellow, lilac, peach, etc.) — pop sobre dark.
+   Borders y texto pasan a un cream claro; shadows ofset usan accent en vez de ink.
+   ============================================================================= */
+[data-theme="dark"] {
+  --doodle-cream: #1b1612;          /* warm near-black */
+  --doodle-paper: #252220;          /* card / surface */
+  --doodle-paper-2: #2f2b27;        /* nested surface */
+  --doodle-ink: #faeed3;            /* warm off-white usado como border/text */
+  --doodle-ink-soft: #f0e4ca;
+  --doodle-muted: #a89e8c;
+
+  /* Acentos: ligeramente desaturados/oscurecidos para mejor armonía */
+  --doodle-yellow: #e6c25a;
+  --doodle-butter: #4a3f28;          /* butter "soft" en dark = warm brown */
+  --doodle-lilac: #b09cf0;
+  --doodle-lilac-soft: #312a47;
+  --doodle-peach: #f0a08f;
+  --doodle-peach-soft: #3d2f2a;
+  --doodle-pink: #f095b8;
+  --doodle-pink-soft: #3d2a35;
+  --doodle-mint: #88d4b8;
+  --doodle-mint-soft: #2a3a35;
+  --doodle-blue: #7ba5ff;
+  --doodle-blue-soft: #2a334a;
+  --doodle-hot: #ff7a93;
+
+  /* Tokens semánticos */
+  --primary: var(--doodle-ink);
+  --accent: var(--doodle-hot);
+  --bg: var(--doodle-cream);
+  --surface: var(--doodle-paper);
+  --surface-2: var(--doodle-paper-2);
+  --text-primary: var(--doodle-ink);
+  --text: var(--doodle-ink);
+  --text-muted: var(--doodle-muted);
+  --border: var(--doodle-ink);
+  --focus: var(--doodle-hot);
+
+  /* Shadows: ofset en yellow para que se vean sobre fondo dark */
+  --shadow-1: 3px 3px 0 var(--doodle-yellow);
+  --shadow-2: 5px 5px 0 var(--doodle-yellow);
+}
+
+/* Ajustes finos de dark mode sobre componentes específicos */
+[data-theme="dark"] body {
+  background: var(--doodle-cream);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .app-shell {
+  background:
+    radial-gradient(circle at 6% 4%, rgba(176, 156, 240, 0.10) 0%, transparent 22%),
+    radial-gradient(circle at 96% 8%, rgba(240, 149, 184, 0.10) 0%, transparent 18%),
+    radial-gradient(circle at 84% 92%, rgba(136, 212, 184, 0.10) 0%, transparent 22%),
+    var(--doodle-cream);
+}
+
+[data-theme="dark"] .sidebar {
+  background: #15110d;            /* aún más oscuro que bg */
+  border-right-color: var(--doodle-ink);
+  color: var(--doodle-ink);
+  box-shadow: 4px 0 0 var(--doodle-ink);
+}
+
+[data-theme="dark"] .sidebar__link {
+  color: color-mix(in srgb, var(--doodle-ink) 75%, transparent);
+}
+[data-theme="dark"] .sidebar__link:hover,
+[data-theme="dark"] .sidebar__link:focus-visible {
+  background: color-mix(in srgb, var(--doodle-yellow) 18%, transparent);
+  color: var(--doodle-ink);
+}
+[data-theme="dark"] .sidebar__link.is-active {
+  background: var(--doodle-yellow);
+  color: #15110d;
+  border-color: #15110d;
+  box-shadow: 3px 3px 0 var(--doodle-pink);
+}
+
+[data-theme="dark"] .topbar {
+  background: var(--doodle-paper);
+  border-bottom-color: var(--doodle-ink);
+  box-shadow: 0 3px 0 var(--doodle-yellow);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .topbar__toggle {
+  background: var(--doodle-paper);
+  border-color: var(--doodle-ink);
+  color: var(--doodle-ink);
+  box-shadow: 2px 2px 0 var(--doodle-yellow);
+}
+
+[data-theme="dark"] .ui-card,
+[data-theme="dark"] .panel,
+[data-theme="dark"] .alert,
+[data-theme="dark"] .modal__content,
+[data-theme="dark"] .skeleton-card,
+[data-theme="dark"] .list,
+[data-theme="dark"] .toast {
+  background: var(--doodle-paper);
+  color: var(--doodle-ink);
+  box-shadow: 4px 4px 0 var(--doodle-yellow);
+}
+
+[data-theme="dark"] .ui-card__header h2,
+[data-theme="dark"] .ui-card__header h3,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4 {
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .ui-field input,
+[data-theme="dark"] .ui-field select,
+[data-theme="dark"] .ui-field textarea,
+[data-theme="dark"] .textarea,
+[data-theme="dark"] .search-bar {
+  background: var(--doodle-paper) !important;
+  color: var(--doodle-ink) !important;
+  border-color: var(--doodle-ink) !important;
+  box-shadow: 2px 2px 0 var(--doodle-yellow);
+}
+
+[data-theme="dark"] .ui-field input::placeholder,
+[data-theme="dark"] .ui-field textarea::placeholder {
+  color: color-mix(in srgb, var(--doodle-muted) 75%, transparent);
+}
+
+[data-theme="dark"] .ui-modal {
+  background: var(--doodle-paper);
+  border-color: var(--doodle-ink);
+  box-shadow: 8px 8px 0 var(--doodle-yellow);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .modal-backdrop,
+[data-theme="dark"] .drawer-backdrop {
+  background: color-mix(in srgb, #000 70%, transparent);
+}
+
+[data-theme="dark"] .ui-btn.btn--primary,
+[data-theme="dark"] .btn-primary {
+  background: var(--doodle-yellow);
+  color: #15110d;
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-hot);
+}
+
+[data-theme="dark"] .ui-btn.btn--secondary,
+[data-theme="dark"] .btn-secondary {
+  background: var(--doodle-lilac);
+  color: #15110d;
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-yellow);
+}
+
+[data-theme="dark"] .ui-btn.btn--ghost {
+  background: transparent;
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink);
+}
+[data-theme="dark"] .ui-btn.btn--ghost:hover {
+  background: color-mix(in srgb, var(--doodle-yellow) 22%, transparent);
+}
+
+[data-theme="dark"] .ui-badge {
+  border-color: var(--doodle-ink);
+  color: var(--doodle-ink);
+}
+[data-theme="dark"] .badge--neutral { background: var(--doodle-paper-2); }
+[data-theme="dark"] .badge--success { background: var(--doodle-mint); color: #15110d; }
+[data-theme="dark"] .badge--warning { background: var(--doodle-yellow); color: #15110d; }
+[data-theme="dark"] .badge--danger  { background: var(--doodle-hot); color: #15110d; }
+[data-theme="dark"] .badge--info    { background: var(--doodle-lilac); color: #15110d; }
+
+[data-theme="dark"] .empty-state {
+  background: var(--doodle-paper-2);
+  border-color: var(--doodle-ink);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .empty-state__icon {
+  background: var(--doodle-paper);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .skeleton {
+  background: color-mix(in srgb, var(--doodle-ink) 12%, var(--doodle-paper));
+}
+
+[data-theme="dark"] .table-wrapper {
+  background: var(--doodle-paper);
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-yellow);
+  color: var(--doodle-ink);
+}
+[data-theme="dark"] .table-wrapper thead {
+  background: var(--doodle-paper-2);
+  border-bottom-color: var(--doodle-ink);
+}
+[data-theme="dark"] .table-wrapper td {
+  border-top-color: color-mix(in srgb, var(--doodle-ink) 18%, transparent);
+}
+[data-theme="dark"] .table-wrapper tbody tr:hover {
+  background: color-mix(in srgb, var(--doodle-yellow) 12%, transparent);
+}
+
+[data-theme="dark"] hr {
+  border-top-color: color-mix(in srgb, var(--doodle-ink) 22%, transparent);
+}
+
+[data-theme="dark"] .login-page,
+[data-theme="dark"] .register-page,
+[data-theme="dark"] .auth-page,
+[data-theme="dark"] .public-page {
+  background:
+    radial-gradient(circle at 8% 6%, rgba(176, 156, 240, 0.10) 0%, transparent 24%),
+    radial-gradient(circle at 92% 14%, rgba(240, 149, 184, 0.10) 0%, transparent 20%),
+    radial-gradient(circle at 86% 88%, rgba(136, 212, 184, 0.10) 0%, transparent 22%),
+    var(--doodle-cream);
+}
+
+[data-theme="dark"] .login-card,
+[data-theme="dark"] .register-main {
+  background: var(--doodle-paper);
+  border-color: var(--doodle-ink);
+  box-shadow: 6px 6px 0 var(--doodle-yellow);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] a { color: var(--doodle-ink); }
+[data-theme="dark"] a:hover { color: var(--doodle-hot); }
+
+[data-theme="dark"] .helper-text { color: var(--doodle-muted); }
+
+/* Landing en dark — el blob background y los textos */
+[data-theme="dark"] .home-page {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(176, 156, 240, 0.14) 0%, transparent 28%),
+    radial-gradient(circle at 92% 4%, rgba(240, 149, 184, 0.14) 0%, transparent 24%),
+    radial-gradient(circle at 80% 60%, rgba(136, 212, 184, 0.14) 0%, transparent 28%),
+    var(--doodle-cream);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .home-page h1,
+[data-theme="dark"] .home-page h2,
+[data-theme="dark"] .home-page h3,
+[data-theme="dark"] .home-page h4 { color: var(--doodle-ink); }
+
+[data-theme="dark"] .home-page .pillar-card,
+[data-theme="dark"] .home-page .how-it-works__step,
+[data-theme="dark"] .home-page .tbe-module-card,
+[data-theme="dark"] .home-page .faq-item,
+[data-theme="dark"] .home-page .therapist-card {
+  background: var(--doodle-paper);
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink);
+  box-shadow: 4px 4px 0 var(--doodle-yellow);
+}
+
+[data-theme="dark"] .home-page .pillar-card:nth-child(1),
+[data-theme="dark"] .home-page .how-it-works__step:nth-child(1) { background: var(--doodle-paper-2); }
+[data-theme="dark"] .home-page .pillar-card:nth-child(2),
+[data-theme="dark"] .home-page .how-it-works__step:nth-child(2) { background: var(--doodle-lilac-soft); }
+[data-theme="dark"] .home-page .pillar-card:nth-child(3),
+[data-theme="dark"] .home-page .how-it-works__step:nth-child(3) { background: var(--doodle-mint-soft); }
+[data-theme="dark"] .home-page .pillar-card:nth-child(4),
+[data-theme="dark"] .home-page .how-it-works__step:nth-child(4) { background: var(--doodle-peach-soft); }
+
+[data-theme="dark"] .home-page .pillar-card__desc,
+[data-theme="dark"] .home-page .how-it-works__desc,
+[data-theme="dark"] .home-page .tbe-module-card__desc,
+[data-theme="dark"] .home-page .therapist-card__bio,
+[data-theme="dark"] .home-page .faq-item__answer,
+[data-theme="dark"] .home-page .landing-section__header .helper-text,
+[data-theme="dark"] .home-page .home-description { color: var(--doodle-ink-soft); }
+
+[data-theme="dark"] .home-page .brifi-spotlight,
+[data-theme="dark"] .home-page .romi-transcript-spotlight {
+  background: var(--doodle-paper);
+  border-color: var(--doodle-ink);
+  box-shadow: 8px 8px 0 var(--doodle-yellow);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .home-page .specialty-chip {
+  background: var(--doodle-paper);
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .home-page .landing-topbar.is-scrolled {
+  background: color-mix(in srgb, var(--doodle-cream) 92%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--doodle-ink) 30%, transparent);
+}
+
+[data-theme="dark"] .home-page .landing-topbar__btn--primary {
+  background: var(--doodle-yellow);
+  color: #15110d;
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-pink);
+}
+
+[data-theme="dark"] .home-page .home-cta .ui-btn,
+[data-theme="dark"] .home-page .home-cta-final .ui-btn {
+  background: var(--doodle-yellow);
+  color: #15110d;
+  border-color: var(--doodle-ink);
+  box-shadow: 4px 4px 0 var(--doodle-pink);
+}
+
+[data-theme="dark"] .home-page .romi-transcript-bubble,
+[data-theme="dark"] .home-page .brifi-bubble {
+  background: var(--doodle-butter);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .home-page .home-cta-final {
+  background: #0e0a07;
+  border-color: var(--doodle-ink);
+  box-shadow: 8px 8px 0 var(--doodle-yellow);
+}
+
+/* -----------------------------------------------------------------------------
+   BASE
+   ----------------------------------------------------------------------------- */
+html, body {
+  background: var(--doodle-cream);
+  color: var(--doodle-ink);
+}
+
+body {
+  font-family: "Inclusive Sans", "Inter", "DM Sans", system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--doodle-ink);
+  letter-spacing: -0.015em;
+  font-weight: 700;
+}
+
+a {
+  color: var(--doodle-ink);
+}
+a:hover { color: var(--doodle-hot); }
+
+/* -----------------------------------------------------------------------------
+   APP SHELL
+   ----------------------------------------------------------------------------- */
+.app-shell {
+  background:
+    radial-gradient(circle at 6% 4%, var(--doodle-lilac-soft) 0%, transparent 22%),
+    radial-gradient(circle at 96% 8%, var(--doodle-pink-soft) 0%, transparent 18%),
+    radial-gradient(circle at 84% 92%, var(--doodle-mint-soft) 0%, transparent 22%),
+    var(--doodle-cream);
+}
+
+.app-shell__main,
+.app-shell__content {
+  background: transparent;
+}
+
+/* -----------------------------------------------------------------------------
+   SIDEBAR — fondo oscuro warm (no negro puro, mejor para uso largo)
+   ----------------------------------------------------------------------------- */
+.sidebar {
+  background: #2a2522;
+  border-right: 2px solid var(--doodle-ink);
+  color: var(--doodle-cream);
+  box-shadow: 4px 0 0 var(--doodle-ink);
+}
+
+.sidebar__brand {
+  border-bottom: 2px dashed color-mix(in srgb, var(--doodle-cream) 25%, transparent);
+}
+
+.sidebar__link {
+  border-radius: 12px;
+  color: color-mix(in srgb, var(--doodle-cream) 80%, transparent);
+  font-weight: 500;
+}
+
+.sidebar__link:hover,
+.sidebar__link:focus-visible {
+  background: color-mix(in srgb, var(--doodle-yellow) 18%, transparent);
+  color: var(--doodle-cream);
+}
+
+.sidebar__link.is-active {
+  background: var(--doodle-yellow);
+  color: var(--doodle-ink);
+  font-weight: 700;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+  border: 2px solid var(--doodle-ink);
+}
+
+.sidebar__link.is-active::before { display: none; }
+
+.sidebar__soon-chip {
+  background: var(--doodle-pink);
+  color: var(--doodle-ink);
+  border: 1.5px solid var(--doodle-ink);
+  border-radius: 100px;
+  padding: 1px 8px;
+  font-weight: 700;
+}
+
+.sidebar__link--coming-soon {
+  border: 1.5px dashed color-mix(in srgb, var(--doodle-cream) 30%, transparent);
+}
+
+/* -----------------------------------------------------------------------------
+   TOPBAR de la app (no la landing topbar)
+   ----------------------------------------------------------------------------- */
+.topbar {
+  background: var(--doodle-paper);
+  border-bottom: 2px solid var(--doodle-ink);
+  box-shadow: 0 3px 0 var(--doodle-ink);
+}
+
+.topbar__toggle {
+  border: 2px solid var(--doodle-ink);
+  border-radius: 12px;
+  background: var(--doodle-paper);
+  color: var(--doodle-ink);
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+
+.topbar__toggle:hover { background: var(--doodle-butter); }
+
+/* -----------------------------------------------------------------------------
+   CARDS (ui-card)
+   ----------------------------------------------------------------------------- */
+.ui-card {
+  background: var(--doodle-paper);
+  border: 2.5px solid var(--doodle-ink);
+  border-radius: 20px;
+  box-shadow: 4px 4px 0 var(--doodle-ink);
+  overflow: visible;
+}
+
+.ui-card.is-hoverable:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--doodle-ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ui-card__header,
+.ui-card__footer {
+  border-color: color-mix(in srgb, var(--doodle-ink) 18%, transparent);
+}
+
+.ui-card__header h2,
+.ui-card__header h3 {
+  color: var(--doodle-ink);
+  font-weight: 700;
+}
+
+/* -----------------------------------------------------------------------------
+   BUTTONS — ui-btn y aliases legacy
+   ----------------------------------------------------------------------------- */
+.ui-btn {
+  border-radius: 14px !important;
+  font-weight: 700;
+  border: 2px solid var(--doodle-ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.ui-btn.btn--primary,
+.btn-primary {
+  background: var(--doodle-ink);
+  color: var(--doodle-cream);
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-hot);
+}
+.ui-btn.btn--primary:hover,
+.btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--doodle-hot);
+}
+
+.ui-btn.btn--secondary,
+.btn-secondary {
+  background: var(--doodle-yellow);
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+.ui-btn.btn--secondary:hover,
+.btn-secondary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--doodle-ink);
+}
+
+.ui-btn.btn--ghost {
+  background: transparent;
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink);
+  box-shadow: none;
+}
+.ui-btn.btn--ghost:hover { background: var(--doodle-butter); }
+
+.ui-btn.btn--danger {
+  background: var(--doodle-hot);
+  color: white;
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+
+.ui-btn.btn--accent {
+  background: var(--doodle-lilac);
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+
+.ui-btn.btn--success {
+  background: var(--doodle-mint);
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink);
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+
+.ui-btn:disabled,
+.ui-btn.is-disabled,
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Tabs / chip-buttons */
+.btn-tab {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink);
+  color: var(--doodle-ink);
+  border-radius: 100px;
+  font-weight: 600;
+}
+.btn-tab:hover { background: var(--doodle-butter); }
+.btn-tab.active {
+  background: var(--doodle-ink);
+  color: var(--doodle-cream);
+  box-shadow: 2px 2px 0 var(--doodle-yellow);
+}
+
+/* -----------------------------------------------------------------------------
+   INPUTS / FIELDS
+   ----------------------------------------------------------------------------- */
+.ui-field input[type="text"],
+.ui-field input[type="email"],
+.ui-field input[type="password"],
+.ui-field input[type="number"],
+.ui-field input[type="tel"],
+.ui-field input[type="search"],
+.ui-field input[type="date"],
+.ui-field input[type="time"],
+.ui-field input[type="url"],
+.ui-field select,
+.ui-field textarea,
+.textarea {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink) !important;
+  border-radius: 12px !important;
+  color: var(--doodle-ink);
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+
+.ui-field input:focus-visible,
+.ui-field select:focus-visible,
+.ui-field textarea:focus-visible,
+.textarea:focus-visible {
+  outline: none;
+  box-shadow: 3px 3px 0 var(--doodle-hot);
+  border-color: var(--doodle-ink) !important;
+}
+
+.ui-field__label {
+  color: var(--doodle-ink);
+  font-weight: 600;
+}
+
+.ui-field__hint { color: var(--doodle-muted); }
+.ui-field__error { color: var(--doodle-hot); font-weight: 600; }
+
+/* Search bar utility */
+.search-bar {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink) !important;
+  border-radius: 100px !important;
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+.search-bar:focus-within { box-shadow: 3px 3px 0 var(--doodle-hot); }
+
+/* -----------------------------------------------------------------------------
+   BADGES / CHIPS
+   ----------------------------------------------------------------------------- */
+.ui-badge {
+  border: 2px solid var(--doodle-ink);
+  border-radius: 100px;
+  font-weight: 700;
+  padding: 0.18rem 0.65rem;
+}
+.badge--neutral { background: var(--doodle-paper); color: var(--doodle-ink); }
+.badge--success { background: var(--doodle-mint); color: var(--doodle-ink); }
+.badge--warning { background: var(--doodle-yellow); color: var(--doodle-ink); }
+.badge--danger  { background: var(--doodle-hot); color: white; }
+.badge--info    { background: var(--doodle-lilac); color: var(--doodle-ink); }
+
+/* -----------------------------------------------------------------------------
+   MODALS
+   ----------------------------------------------------------------------------- */
+.ui-modal {
+  background: var(--doodle-paper);
+  border: 3px solid var(--doodle-ink);
+  border-radius: 24px;
+  box-shadow: 8px 8px 0 var(--doodle-ink);
+  overflow: visible;
+}
+
+.ui-modal__header,
+.ui-modal__footer {
+  border-color: color-mix(in srgb, var(--doodle-ink) 18%, transparent);
+}
+
+.ui-modal__title {
+  color: var(--doodle-ink);
+  font-weight: 700;
+}
+
+.ui-modal__close {
+  border: 2px solid var(--doodle-ink);
+  border-radius: 50%;
+  background: var(--doodle-paper);
+  color: var(--doodle-ink);
+}
+.ui-modal__close:hover { background: var(--doodle-pink-soft); }
+
+.modal-backdrop,
+.drawer-backdrop {
+  background: color-mix(in srgb, var(--doodle-ink) 50%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.drawer {
+  background: var(--doodle-paper);
+  border-left: 3px solid var(--doodle-ink);
+}
+
+/* -----------------------------------------------------------------------------
+   EMPTY STATES / SKELETONS
+   ----------------------------------------------------------------------------- */
+.empty-state {
+  background: var(--doodle-butter);
+  border: 2.5px dashed var(--doodle-ink);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-state__icon {
+  background: var(--doodle-paper);
+  border: 2.5px solid var(--doodle-ink);
+  color: var(--doodle-ink);
+  border-radius: 50%;
+}
+
+.empty-state__title { color: var(--doodle-ink); font-weight: 700; }
+.empty-state__message { color: var(--doodle-muted); }
+
+.skeleton {
+  background: color-mix(in srgb, var(--doodle-ink) 6%, var(--doodle-paper));
+  border-radius: 12px;
+}
+
+.skeleton-card {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+
+/* -----------------------------------------------------------------------------
+   PAGE HEADER / BREADCRUMBS
+   ----------------------------------------------------------------------------- */
+.page-header {
+  border-bottom: 2px dashed color-mix(in srgb, var(--doodle-ink) 25%, transparent);
+}
+
+.page-header h1,
+.page-header h2 {
+  color: var(--doodle-ink);
+  font-weight: 800;
+}
+
+.page-breadcrumbs,
+.breadcrumb {
+  color: var(--doodle-muted);
+}
+
+.breadcrumb a { color: var(--doodle-ink); font-weight: 500; }
+.breadcrumb a:hover { color: var(--doodle-hot); }
+
+/* -----------------------------------------------------------------------------
+   TABLES — más sutiles (mantener legibilidad densa)
+   ----------------------------------------------------------------------------- */
+.table-wrapper {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+  overflow: auto;
+}
+
+.table-wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table-wrapper thead {
+  background: var(--doodle-butter);
+  border-bottom: 2px solid var(--doodle-ink);
+}
+
+.table-wrapper th {
+  color: var(--doodle-ink);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.table-wrapper td {
+  border-top: 1px solid color-mix(in srgb, var(--doodle-ink) 12%, transparent);
+}
+
+.table-wrapper tbody tr:hover {
+  background: color-mix(in srgb, var(--doodle-yellow) 10%, transparent);
+}
+
+/* -----------------------------------------------------------------------------
+   AVATARS GENÉRICOS
+   ----------------------------------------------------------------------------- */
+.avatar,
+[class*="avatar"] {
+  border: 2.5px solid var(--doodle-ink);
+}
+
+/* -----------------------------------------------------------------------------
+   FOCUS RING general
+   ----------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 3px solid var(--doodle-hot);
+  outline-offset: 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   AUTH / LANDING WRAPPERS — fondo cream + decoraciones
+   ----------------------------------------------------------------------------- */
+.auth-page,
+.register-page,
+.login-page,
+.public-page,
+.landing-page {
+  background:
+    radial-gradient(circle at 8% 6%, var(--doodle-lilac-soft) 0%, transparent 24%),
+    radial-gradient(circle at 92% 14%, var(--doodle-pink-soft) 0%, transparent 20%),
+    radial-gradient(circle at 86% 88%, var(--doodle-mint-soft) 0%, transparent 22%),
+    var(--doodle-cream);
+  min-height: 100vh;
+  position: relative;
+}
+
+.auth-page .ui-card,
+.register-page .ui-card,
+.login-page .ui-card,
+.public-page .ui-card {
+  background: var(--doodle-paper);
+}
+
+/* Login card */
+.login-card,
+.register-main {
+  background: var(--doodle-paper);
+  border: 2.5px solid var(--doodle-ink);
+  border-radius: 24px;
+  box-shadow: 6px 6px 0 var(--doodle-ink);
+}
+
+/* Register stepper */
+.stepper,
+.register-stepper {
+  --stepper-active: var(--doodle-ink);
+  --stepper-done: var(--doodle-mint);
+}
+
+.stepper__step.is-active .stepper__bullet,
+.register-stepper__step.is-active .stepper__bullet {
+  background: var(--doodle-yellow);
+  border-color: var(--doodle-ink);
+  color: var(--doodle-ink);
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+
+/* -----------------------------------------------------------------------------
+   REGISTER STEPS — headers + grid
+   ----------------------------------------------------------------------------- */
+.register-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.register-step__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.register-step__title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  font-weight: 800;
+  color: var(--doodle-ink);
+  letter-spacing: -0.015em;
+}
+
+.register-step__subtitle {
+  margin: 0;
+  color: var(--doodle-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.register-step__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.2rem;
+}
+
+@media (max-width: 720px) {
+  .register-step__grid { grid-template-columns: 1fr; }
+}
+
+/* -----------------------------------------------------------------------------
+   ADDRESS FIELDS — selector de colonia + hints CP
+   ----------------------------------------------------------------------------- */
+.address-fields__select {
+  width: 100%;
+  color: var(--doodle-ink);
+  border: 2px solid var(--doodle-ink) !important;
+  border-radius: 12px !important;
+  padding: 0.55rem 0.8rem;
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  /* Background shorthand para que ninguna regla posterior (.ui-field input) pueda
+     resetear el repeat/position/size con su propio shorthand. */
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231A1A1A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 8l4 4 4-4'/></svg>")
+    right 0.8rem center / 16px no-repeat
+    var(--doodle-paper) !important;
+  padding-right: 2.2rem;
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+
+.address-fields__select:focus-visible {
+  outline: none;
+  box-shadow: 3px 3px 0 var(--doodle-hot);
+}
+
+.address-fields__select:disabled {
+  background: color-mix(in srgb, var(--doodle-ink) 4%, var(--doodle-paper)) !important;
+  color: var(--doodle-muted);
+  cursor: not-allowed;
+}
+
+.address-fields__select.has-error {
+  border-color: var(--doodle-hot) !important;
+  box-shadow: 2px 2px 0 var(--doodle-hot);
+}
+
+.address-fields__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--doodle-butter);
+  border: 2px dashed var(--doodle-ink);
+  border-radius: 14px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+  color: var(--doodle-ink);
+  font-weight: 500;
+}
+
+.address-fields__hint--ok {
+  background: var(--doodle-mint-soft);
+  border-style: solid;
+}
+
+.address-fields__hint--warn {
+  background: var(--doodle-peach-soft);
+  border-style: solid;
+  border-color: var(--doodle-hot);
+  color: var(--doodle-ink);
+}
+
+.address-fields__hint svg {
+  flex-shrink: 0;
+  color: var(--doodle-ink);
+}
+.address-fields__hint--ok svg { color: color-mix(in srgb, var(--doodle-mint) 30%, var(--doodle-ink)); }
+.address-fields__hint--warn svg { color: var(--doodle-hot); }
+
+/* Dark mode para los hints y select */
+[data-theme="dark"] .address-fields__select {
+  color: var(--doodle-ink);
+  border-color: var(--doodle-ink) !important;
+  box-shadow: 2px 2px 0 var(--doodle-yellow);
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23FAEED3' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 8l4 4 4-4'/></svg>")
+    right 0.8rem center / 16px no-repeat
+    var(--doodle-paper) !important;
+}
+
+[data-theme="dark"] .address-fields__hint {
+  background: var(--doodle-paper-2);
+  border-color: var(--doodle-ink);
+  color: var(--doodle-ink);
+}
+[data-theme="dark"] .address-fields__hint--ok { background: var(--doodle-mint-soft); }
+[data-theme="dark"] .address-fields__hint--warn { background: var(--doodle-peach-soft); }
+
+/* -----------------------------------------------------------------------------
+   LIST / KV components
+   ----------------------------------------------------------------------------- */
+.list {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+  overflow: hidden;
+}
+.list li + li { border-color: color-mix(in srgb, var(--doodle-ink) 14%, transparent); }
+
+/* -----------------------------------------------------------------------------
+   AJUSTES MENORES
+   ----------------------------------------------------------------------------- */
+hr {
+  border: none;
+  border-top: 2px dashed color-mix(in srgb, var(--doodle-ink) 18%, transparent);
+  margin: 1rem 0;
+}
+
+/* -----------------------------------------------------------------------------
+   PANELS / ALERTS / DASHBOARD WIDGETS
+   ----------------------------------------------------------------------------- */
+.panel {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+
+.panel--outline {
+  background: transparent;
+  border-style: dashed;
+}
+
+.alert {
+  background: var(--doodle-butter);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+  color: var(--doodle-ink);
+}
+
+.alert--error {
+  background: var(--doodle-peach-soft);
+  border-color: var(--doodle-hot);
+}
+
+.alert__title { font-weight: 700; color: var(--doodle-ink); }
+.alert__message { color: var(--doodle-ink-soft); }
+
+.dashboard-widgets {
+  gap: 1.2rem;
+}
+
+.dashboard-page__title,
+.dashboard-page__section-title {
+  color: var(--doodle-ink);
+  font-weight: 800;
+}
+
+.dashboard-page__subtitle,
+.dashboard-page__body-text {
+  color: var(--doodle-muted);
+}
+
+.helper-text { color: var(--doodle-muted); }
+
+.link--button {
+  color: var(--doodle-ink);
+  font-weight: 600;
+  border-bottom: 2px solid var(--doodle-yellow);
+}
+.link--button:hover { color: var(--doodle-hot); }
+
+/* Tabs */
+.tabs-container {
+  border-bottom: 2px dashed color-mix(in srgb, var(--doodle-ink) 22%, transparent);
+}
+
+.tab-content {
+  padding-top: 1.2rem;
+}
+
+/* -----------------------------------------------------------------------------
+   TOASTS / NOTIFICATIONS
+   ----------------------------------------------------------------------------- */
+.toast,
+[class*="toast__item"] {
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0 var(--doodle-ink);
+  color: var(--doodle-ink);
+}
+
+/* -----------------------------------------------------------------------------
+   MODAL legacy (.modal, no ui-modal)
+   ----------------------------------------------------------------------------- */
+.modal__content {
+  background: var(--doodle-paper);
+  border: 3px solid var(--doodle-ink);
+  border-radius: 22px;
+  box-shadow: 6px 6px 0 var(--doodle-ink);
+}
+
+.modal__header {
+  border-bottom: 2px dashed color-mix(in srgb, var(--doodle-ink) 18%, transparent);
+}
+
+/* -----------------------------------------------------------------------------
+   CLINICAL HISTORY TABS (3 tipos: psicológica, psiquiátrica, psicoterapéutica)
+   ----------------------------------------------------------------------------- */
+.clinical-history-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ch-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.4rem;
+  background: var(--doodle-paper);
+  border: 2.5px solid var(--doodle-ink);
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+
+.ch-tab {
+  flex: 1 1 0;
+  min-width: 150px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--doodle-ink);
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.12s ease;
+}
+
+.ch-tab:hover {
+  background: var(--doodle-butter);
+}
+
+.ch-tab.is-active {
+  background: var(--doodle-yellow);
+  border-color: var(--doodle-ink);
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+
+.ch-tab-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ch-tab-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.ch-readonly-field__label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--doodle-muted);
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.ch-readonly-field__value {
+  margin: 0;
+  color: var(--doodle-ink-soft);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.ch-physical-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.ch-physical-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--doodle-butter);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 14px;
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+
+[data-theme="dark"] .ch-tabs,
+[data-theme="dark"] .ch-physical-item {
+  background: var(--doodle-paper);
+  box-shadow: 3px 3px 0 var(--doodle-yellow);
+}
+
+[data-theme="dark"] .ch-tab.is-active {
+  background: var(--doodle-yellow);
+  color: #15110d;
+}
+
+/* -----------------------------------------------------------------------------
+   HISTORIA CLÍNICA FORM / READ-ONLY (schema-driven)
+   ----------------------------------------------------------------------------- */
+.historia-form,
+.historia-readonly {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.historia-form__legal {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: var(--doodle-mint-soft);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 14px;
+  padding: 0.7rem 1rem;
+  font-size: 0.82rem;
+  color: var(--doodle-ink);
+  line-height: 1.45;
+}
+
+.historia-form__legal svg { flex-shrink: 0; margin-top: 2px; }
+.historia-form__legal p { margin: 0; }
+
+.historia-form__seq {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--doodle-yellow);
+  border: 2px solid var(--doodle-ink);
+  color: var(--doodle-ink);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.historia-form__grid,
+.historia-readonly__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem 1rem;
+}
+
+@media (max-width: 720px) {
+  .historia-form__grid,
+  .historia-readonly__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.historia-form__field.span-2,
+.historia-readonly__field.span-2 {
+  grid-column: 1 / -1;
+}
+
+.historia-readonly__label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--doodle-muted);
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.historia-readonly__value {
+  margin: 0;
+  color: var(--doodle-ink-soft);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.historia-form__readonly-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--doodle-peach-soft);
+  border: 2px dashed var(--doodle-hot);
+  border-radius: 12px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--doodle-ink);
+}
+
+/* Bloque de detalle opcional que aparece bajo un select cuando hay valor */
+.historia-form__detalle {
+  margin-top: 0.55rem;
+  padding: 0.6rem 0.7rem;
+  background: var(--doodle-butter);
+  border: 2px dashed var(--doodle-ink);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  animation: detalle-pop 0.18s ease;
+}
+
+.historia-form__detalle-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--doodle-ink);
+  letter-spacing: 0.02em;
+}
+
+.historia-form__detalle-label .helper-text {
+  font-weight: 500;
+  color: var(--doodle-muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.historia-form__detalle textarea {
+  min-height: 56px;
+  resize: vertical;
+}
+
+@keyframes detalle-pop {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.historia-readonly__detalle {
+  margin: 0.35rem 0 0;
+  padding: 0.5rem 0.7rem;
+  background: var(--doodle-butter);
+  border: 1.5px dashed var(--doodle-ink);
+  border-radius: 10px;
+  font-size: 0.88rem;
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .historia-form__detalle,
+[data-theme="dark"] .historia-readonly__detalle {
+  background: var(--doodle-paper-2);
+  color: var(--doodle-ink);
+}
+
+[data-theme="dark"] .historia-form__legal {
+  background: var(--doodle-mint-soft);
+  color: var(--doodle-ink);
+}
+
+/* -----------------------------------------------------------------------------
+   La landing tiene su propio skin completo; restauramos lo que pisaríamos.
+   .home-page ya sobrescribe los tokens locales en su CSS scopeado.
+   ----------------------------------------------------------------------------- */
+.home-page .ui-card,
+.home-page .ui-btn,
+.home-page .ui-modal,
+.home-page .topbar,
+.home-page .sidebar,
+.home-page .app-shell,
+.home-page .panel,
+.home-page .alert { /* no-op aquí — la landing controla su look */ }
+
+/* =============================================================================
+   BRAND: TANATOLOGÍA Y CUIDADOS PALIATIVOS
+   Paleta sage + lavanda + rosa polvo. Mismo skin doodle, tono sobrio y cálido,
+   apropiado para acompañamiento al final de la vida.
+   Se activa con data-brand="tanatologia" en <html> (ver src/main.jsx).
+   ============================================================================= */
+[data-brand="tanatologia"] {
+  --doodle-cream: #faf6f2;       /* cream cálido neutral */
+  --doodle-paper: #ffffff;
+  --doodle-ink: #1f1a1c;         /* casi negro cálido (sin tinte plum) */
+  --doodle-ink-soft: #322a2c;
+  --doodle-muted: #6f655e;       /* gris cálido warm */
+
+  /* Acentos: sage como principal, rosa cálido como secundario.
+     Quitamos lavanda/uva para evitar "morado sobre morado" en componentes
+     que usan yellow/butter para texto+fondo. */
+  --doodle-yellow: #d4b88a;          /* mostaza cálido (no lavanda) */
+  --doodle-butter: #f3ead8;          /* mostaza suave */
+  --doodle-lilac: #d8e8da;           /* sage soft (en vez de lavanda) */
+  --doodle-lilac-soft: #ebf2ec;
+  --doodle-peach: #d49a98;           /* rosa cálido sobrio */
+  --doodle-peach-soft: #f0dad8;
+  --doodle-pink: #d49a98;            /* rosa cálido sobrio */
+  --doodle-pink-soft: #f0dad8;
+  --doodle-mint: #9dc4a0;            /* verde salvia */
+  --doodle-mint-soft: #d8e8da;
+  --doodle-blue: #4f7a6f;            /* sage profundo en vez de azul/uva */
+  --doodle-blue-soft: #d8e8da;
+  --doodle-hot: #b8525a;             /* rosa-terracota intenso (acento) */
+
+  --primary: var(--doodle-ink);
+  --accent: var(--doodle-hot);
+  --bg: var(--doodle-cream);
+  --surface: var(--doodle-paper);
+  --text-primary: var(--doodle-ink);
+  --text: var(--doodle-ink);
+  --text-muted: var(--doodle-muted);
+  --border: var(--doodle-ink);
+  --focus: var(--doodle-hot);
+
+  --shadow-1: 3px 3px 0 var(--doodle-ink);
+  --shadow-2: 5px 5px 0 var(--doodle-ink);
+}
+
+/* Dark mode del brand tanatologia: warm dark con plum oscuro */
+[data-brand="tanatologia"][data-theme="dark"],
+[data-theme="dark"][data-brand="tanatologia"] {
+  --doodle-cream: #181614;          /* warm near-black */
+  --doodle-paper: #232020;          /* card */
+  --doodle-paper-2: #2c2826;        /* nested */
+  --doodle-ink: #f3ead8;            /* warm off-white */
+  --doodle-ink-soft: #e6dcc8;
+  --doodle-muted: #b0a89c;
+
+  --doodle-yellow: #d4b88a;
+  --doodle-butter: #3a3025;
+  --doodle-lilac: #b6d4b8;          /* sage como lilac dark */
+  --doodle-lilac-soft: #2f3a30;
+  --doodle-peach: #d49a98;
+  --doodle-peach-soft: #3a2826;
+  --doodle-pink: #d49a98;
+  --doodle-pink-soft: #3a2826;
+  --doodle-mint: #b6d4b8;
+  --doodle-mint-soft: #2f3a30;
+  --doodle-blue: #9dc4a0;           /* sage en dark */
+  --doodle-blue-soft: #233028;
+  --doodle-hot: #d97a7a;
+}
+
+/* =============================================================================
+   Campo tipo "scale" (slider 0–10) usado en ESAS / EVA paliativos.
+   Estilo doodle: track grueso, thumb con borde negro y sombra offset.
+   ============================================================================= */
+.historia-form__scale {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.4rem 0.2rem;
+}
+.historia-form__scale-range {
+  flex: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  height: 28px;
+  cursor: pointer;
+}
+.historia-form__scale-range::-webkit-slider-runnable-track {
+  height: 10px;
+  background: var(--doodle-lilac-soft);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 99px;
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+.historia-form__scale-range::-moz-range-track {
+  height: 10px;
+  background: var(--doodle-lilac-soft);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 99px;
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+.historia-form__scale-range::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
+  border-radius: 50%;
+  background: var(--doodle-hot);
+  border: 2.5px solid var(--doodle-ink);
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+  cursor: grab;
+}
+.historia-form__scale-range::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--doodle-hot);
+  border: 2.5px solid var(--doodle-ink);
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+  cursor: grab;
+}
+.historia-form__scale-range:active::-webkit-slider-thumb { cursor: grabbing; }
+.historia-form__scale-range:active::-moz-range-thumb { cursor: grabbing; }
+
+.historia-form__scale-value {
+  min-width: 3.5rem;
+  text-align: center;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--doodle-ink);
+  background: var(--doodle-butter);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 10px;
+  padding: 0.2rem 0.5rem;
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+
+/* =============================================================================
+   Gráfica ESAS (clinimetría evolutiva). Estilo doodle, SVG sin deps.
+   ============================================================================= */
+.esas-chart { display: flex; flex-direction: column; gap: 0.9rem; }
+.esas-chart__svg {
+  display: block;
+  background: var(--doodle-paper);
+  border: 2px solid var(--doodle-ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--doodle-ink);
+}
+.esas-chart__legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+.esas-chart__legend-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 99px;
+  background: var(--doodle-paper);
+  border: 1.5px solid var(--doodle-ink);
+  font-size: 0.85rem;
+  color: var(--doodle-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  opacity: 0.55;
+}
+.esas-chart__legend-btn:hover { opacity: 0.85; }
+.esas-chart__legend-btn.is-on {
+  background: var(--doodle-butter);
+  color: var(--doodle-ink);
+  opacity: 1;
+  box-shadow: 2px 2px 0 var(--doodle-ink);
+}
+.esas-chart__legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--doodle-ink);
+}
+
+/* =============================================================================
+   Diálogo de fallecimiento (paliativos). Sobrio, sin alertas estridentes.
+   ============================================================================= */
+.mark-deceased__intro {
+  background: var(--doodle-cream);
+  border: 1.5px solid var(--doodle-ink);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.92rem;
+  color: var(--doodle-ink);
+}
+.mark-deceased__intro p { margin-bottom: 0.4rem; }
+.mark-deceased__intro ul {
+  list-style: disc;
+  padding-left: 1.2rem;
+  margin: 0;
+  color: var(--doodle-muted);
+}
+.mark-deceased__intro ul li { margin-top: 0.2rem; }
+
+/* Banner DECEASED — sobrio, sin colores estridentes. Plum grayscale. */
+.patient-status-banner--deceased {
+  background: var(--doodle-cream);
+  border: 1.5px solid var(--doodle-ink);
+  color: var(--doodle-ink);
+}
+.patient-status-banner--deceased .status-dot--off {
+  background: var(--doodle-muted);
+}

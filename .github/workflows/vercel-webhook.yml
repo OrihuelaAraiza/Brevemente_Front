@@ -1,0 +1,19 @@
+# Este workflow está desactivado - usando vercel-deploy.yml en su lugar
+# Se mantiene como referencia pero no se ejecuta
+
+name: Vercel Webhook Trigger (Disabled)
+
+on:
+  workflow_dispatch: # Solo se puede ejecutar manualmente
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Info
+        run: |
+          echo "⚠️  Este workflow está desactivado"
+          echo "Usa 'Vercel Auto-Deploy Check' en su lugar"

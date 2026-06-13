@@ -1,0 +1,350 @@
+/* =============================================================================
+   BreveMente v2 — Skin Azul Neural
+   Override del tema doodle para el vertical de salud mental.
+
+   Paleta:
+     --bm-blue-neural:    #304768  (primario)
+     --bm-blue-conciencia:#75AFBC  (acento)
+     --bm-gray-digital:   #F4F4F4  (background)
+
+   Filosofía: limpio, profesional, clínico. Sin ofset shadows tipo doodle.
+   ============================================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Inclusive+Sans:wght@300;400;500;600;700&display=swap");
+
+/* ---------------------------------------------------------------------------
+   1. Tokens base reasignados a paleta BreveMente
+   --------------------------------------------------------------------------- */
+:root[data-brand="brevemente"],
+[data-brand="brevemente"] {
+  --bm-blue-neural: #304768;
+  --bm-blue-neural-soft: #4a6589;
+  --bm-blue-neural-deep: #1f3252;
+  --bm-blue-conciencia: #75AFBC;
+  --bm-blue-conciencia-soft: #a8cdd5;
+  --bm-gray-digital: #F4F4F4;
+  --bm-paper: #ffffff;
+  --bm-ink: #1a2a3f;
+  --bm-muted: #5a6b80;
+  --bm-hairline: #d8dde5;
+
+  /* Semantic remapping */
+  --primary: var(--bm-blue-neural);
+  --primary-hover: var(--bm-blue-neural-deep);
+  --secondary: var(--bm-blue-conciencia);
+  --accent: var(--bm-blue-conciencia);
+  --brand: var(--bm-blue-neural);
+  --brand-ink: var(--bm-ink);
+
+  --bg: var(--bm-gray-digital);
+  --bg-soft: #fafbfc;
+  --surface: var(--bm-paper);
+  --surface-2: #eef1f5;
+
+  --ink: var(--bm-ink);
+  --muted: var(--bm-muted);
+  --border: var(--bm-hairline);
+  --hairline-1: var(--bm-hairline);
+
+  /* Sombras suaves, sin offset */
+  --shadow-1: 0 1px 2px rgba(48, 71, 104, 0.06), 0 4px 12px rgba(48, 71, 104, 0.04);
+  --shadow-2: 0 2px 4px rgba(48, 71, 104, 0.08), 0 12px 24px rgba(48, 71, 104, 0.06);
+  --shadow-soft: 0 8px 32px rgba(48, 71, 104, 0.08);
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+/* Forzar light mode (la marca BreveMente vive en claro) */
+[data-brand="brevemente"] {
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------------------
+   2. Tipografía global Inclusive Sans
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] body,
+[data-brand="brevemente"] {
+  font-family: "Inclusive Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important;
+  color: var(--bm-ink);
+  background: var(--bm-gray-digital);
+  font-feature-settings: "ss01";
+  letter-spacing: -0.005em;
+}
+
+[data-brand="brevemente"] h1,
+[data-brand="brevemente"] h2,
+[data-brand="brevemente"] h3,
+[data-brand="brevemente"] h4,
+[data-brand="brevemente"] h5 {
+  font-weight: 600 !important;
+  letter-spacing: -0.025em !important;
+  color: var(--bm-ink);
+}
+
+[data-brand="brevemente"] h1 { font-weight: 700 !important; }
+
+/* ---------------------------------------------------------------------------
+   3. Cards — hairline 1px, sin sombra dura
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .ui-card,
+[data-brand="brevemente"] .card,
+[data-brand="brevemente"] .login-card,
+[data-brand="brevemente"] .register-card,
+[data-brand="brevemente"] .dashboard-card,
+[data-brand="brevemente"] .patient-card {
+  background: var(--bm-paper) !important;
+  border: 1px solid var(--bm-hairline) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-1) !important;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+[data-brand="brevemente"] .ui-card:hover,
+[data-brand="brevemente"] .patient-card:hover {
+  box-shadow: var(--shadow-2) !important;
+  border-color: var(--bm-blue-neural-soft) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   4. Botones — primario azul neural, pill suave
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .btn-primary,
+[data-brand="brevemente"] .ui-btn--primary,
+[data-brand="brevemente"] button[type="submit"]:not(.btn-secondary):not(.btn-ghost) {
+  background: var(--bm-blue-neural) !important;
+  border: 1px solid var(--bm-blue-neural) !important;
+  color: var(--bm-paper) !important;
+  border-radius: 10px !important;
+  font-weight: 500 !important;
+  padding: 0.7rem 1.4rem !important;
+  box-shadow: none !important;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+[data-brand="brevemente"] .btn-primary:hover,
+[data-brand="brevemente"] .ui-btn--primary:hover {
+  background: var(--bm-blue-neural-deep) !important;
+  transform: translateY(-1px);
+}
+
+[data-brand="brevemente"] .btn-secondary,
+[data-brand="brevemente"] .ui-btn--secondary {
+  background: transparent !important;
+  border: 1px solid var(--bm-blue-neural) !important;
+  color: var(--bm-blue-neural) !important;
+  border-radius: 10px !important;
+  font-weight: 500 !important;
+}
+
+[data-brand="brevemente"] .btn-secondary:hover {
+  background: rgba(48, 71, 104, 0.06) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   5. Inputs — hairline + focus ring azul conciencia
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .form-control,
+[data-brand="brevemente"] input[type="text"],
+[data-brand="brevemente"] input[type="email"],
+[data-brand="brevemente"] input[type="password"],
+[data-brand="brevemente"] input[type="tel"],
+[data-brand="brevemente"] input[type="number"],
+[data-brand="brevemente"] input[type="date"],
+[data-brand="brevemente"] select,
+[data-brand="brevemente"] textarea {
+  background: var(--bm-paper) !important;
+  border: 1px solid var(--bm-hairline) !important;
+  border-radius: 10px !important;
+  padding: 0.65rem 0.9rem !important;
+  font-family: inherit !important;
+  color: var(--bm-ink) !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-brand="brevemente"] input:focus,
+[data-brand="brevemente"] select:focus,
+[data-brand="brevemente"] textarea:focus {
+  border-color: var(--bm-blue-conciencia) !important;
+  box-shadow: 0 0 0 3px rgba(117, 175, 188, 0.18) !important;
+  outline: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   6. Sidebar — fondo paper + active con barra azul
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .sidebar,
+[data-brand="brevemente"] .nav-sidebar {
+  background: var(--bm-paper) !important;
+  border-right: 1px solid var(--bm-hairline) !important;
+  box-shadow: none !important;
+}
+
+[data-brand="brevemente"] .sidebar a,
+[data-brand="brevemente"] .nav-sidebar a {
+  color: var(--bm-muted) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  transition: background 0.15s ease, color 0.15s ease;
+  position: relative;
+}
+
+[data-brand="brevemente"] .sidebar a:hover,
+[data-brand="brevemente"] .nav-sidebar a:hover {
+  background: var(--bm-gray-digital) !important;
+  color: var(--bm-ink) !important;
+}
+
+[data-brand="brevemente"] .sidebar a.active,
+[data-brand="brevemente"] .nav-sidebar a.active,
+[data-brand="brevemente"] .sidebar a.is-active {
+  background: rgba(48, 71, 104, 0.08) !important;
+  color: var(--bm-blue-neural) !important;
+  font-weight: 600 !important;
+}
+
+[data-brand="brevemente"] .sidebar a.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--bm-blue-neural);
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   7. Topbar
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .topbar,
+[data-brand="brevemente"] .app-topbar {
+  background: var(--bm-paper) !important;
+  border-bottom: 1px solid var(--bm-hairline) !important;
+  box-shadow: none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   8. Badges
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .badge {
+  background: var(--bm-gray-digital) !important;
+  color: var(--bm-blue-neural) !important;
+  border: 1px solid var(--bm-hairline) !important;
+  border-radius: 999px !important;
+  padding: 0.2rem 0.7rem !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+}
+
+[data-brand="brevemente"] .badge--accent,
+[data-brand="brevemente"] .badge--primary {
+  background: rgba(117, 175, 188, 0.12) !important;
+  color: var(--bm-blue-neural-deep) !important;
+  border-color: var(--bm-blue-conciencia-soft) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   9. Modals
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .modal-content,
+[data-brand="brevemente"] .ui-modal {
+  background: var(--bm-paper) !important;
+  border: 1px solid var(--bm-hairline) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   10. Links
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] a:not(.btn):not(.tan-btn):not(.tan-topbar__brand) {
+  color: var(--bm-blue-neural) !important;
+  text-decoration: none;
+}
+
+[data-brand="brevemente"] a:not(.btn):not(.tan-btn):hover {
+  color: var(--bm-blue-neural-deep) !important;
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------------
+   11. Tablas
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] table {
+  background: var(--bm-paper) !important;
+  border-radius: 10px !important;
+}
+
+[data-brand="brevemente"] table th {
+  background: var(--bm-gray-digital) !important;
+  color: var(--bm-muted) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.05em !important;
+  border-bottom: 1px solid var(--bm-hairline) !important;
+}
+
+[data-brand="brevemente"] table td {
+  border-bottom: 1px solid var(--bm-hairline) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   12. Login hero aside (con imagen psicología)
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .login-hero {
+  border: 1px solid var(--bm-hairline) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  min-height: 480px !important;
+  box-shadow: var(--shadow-soft) !important;
+  position: relative !important;
+  background: linear-gradient(135deg, var(--bm-blue-neural) 0%, var(--bm-blue-neural-deep) 100%) !important;
+}
+
+[data-brand="brevemente"] .bm-login-hero__inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+[data-brand="brevemente"] .bm-login-hero__image {
+  width: 100% !important;
+  max-width: 360px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.25));
+  z-index: 1;
+  position: relative;
+}
+
+[data-brand="brevemente"] .login-hero::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(117, 175, 188, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   13. Helpers
+   --------------------------------------------------------------------------- */
+[data-brand="brevemente"] .text-muted,
+[data-brand="brevemente"] .helper-text,
+[data-brand="brevemente"] small.hint {
+  color: var(--bm-muted) !important;
+}

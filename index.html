@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="theme-color" content="#304768" />
+    <meta name="description" content="BreveMente · Plataforma clínica de salud mental con expediente digital normado, agenda y Romi Transcript para profesionales." />
+    <title>BreveMente · Plataforma clínica de salud mental</title>
+    <script>
+      (() => {
+        try {
+          const t = localStorage.getItem("theme");
+          if (t) {
+            document.documentElement.dataset.theme = t;
+            document.documentElement.style.colorScheme = t === "dark" ? "dark" : "light";
+          }
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
