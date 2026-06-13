@@ -11,52 +11,6 @@ export const ROLES_LABEL = {
   [ROLES.ASSISTANT]: "Asistente",
   [ROLES.PATIENT]: "Paciente",
 };
-
-/**
- * Especialidad del profesional clínico.
- * Determina permisos finos (prescripciones, reportes psiquiátricos).
- * Solo aplica cuando role === PROFESSIONAL.
- */
-export const SPECIALTIES = {
-  PALIATIVISTA: "PALIATIVISTA",
-};
-
-export const SPECIALTY_LABELS = {
-  [SPECIALTIES.PALIATIVISTA]: "Médico Paliativista",
-};
-
-export const SPECIALTY_DESCRIPTIONS = {
-  [SPECIALTIES.PALIATIVISTA]:
-    "Médico especialista en cuidados paliativos. Maneja control de síntomas, dolor y atención integral al final de la vida. Puede prescribir opioides y coadyuvantes.",
-};
-
-export const SPECIALTY_TO_HISTORY_TYPE = {
-  [SPECIALTIES.PALIATIVISTA]: "PALIATIVA",
-};
-
-export const SPECIALTIES_CAN_PRESCRIBE = new Set([SPECIALTIES.PALIATIVISTA]);
-
-export const SPECIALTY_OPTIONS = [
-  {
-    value: SPECIALTIES.PALIATIVISTA,
-    label: SPECIALTY_LABELS.PALIATIVISTA,
-    description: SPECIALTY_DESCRIPTIONS.PALIATIVISTA,
-  },
-];
-export const PATIENT_STATUS = {
-  ACTIVE: "ACTIVE",
-  INACTIVE: "INACTIVE",
-  DISCHARGED: "DISCHARGED",
-  DECEASED: "DECEASED",
-};
-
-export const PATIENT_STATUS_LABEL = {
-  [PATIENT_STATUS.ACTIVE]: "Activo",
-  [PATIENT_STATUS.INACTIVE]: "Inactivo",
-  [PATIENT_STATUS.DISCHARGED]: "Dado de alta",
-  [PATIENT_STATUS.DECEASED]: "Fallecido",
-};
-
 export const DISCHARGE_REASONS = [
   { value: "OBJETIVOS_CUMPLIDOS", label: "Objetivos cumplidos" },
   { value: "ALTA_VOLUNTARIA", label: "Alta voluntaria" },
@@ -132,15 +86,10 @@ export const ROUTES = {
   prescriptionsNew: "/prescriptions/new",
   prescriptionDetail: "/prescriptions/:id",
   reports: "/reports",
-  expedientes: "/expedientes",
-  solicitudes: "/solicitudes",
   orderNew: "/patients/:patientId/orders/new",
   orderDetail: "/patients/:patientId/orders/:orderId",
   reportNew: "/patients/:patientId/reports/new",
   reportDetail: "/patients/:patientId/reports/:reportId",
-  patientScopedPrescriptions: "/patients/:id/prescriptions",
-  patientScopedSessions: "/patients/:id/sessions",
-  patientScopedReports: "/patients/:patientId/reports",
   supervision: "/supervision",
   // Patient routes
   patientDashboard: "/patient/dashboard",
@@ -241,10 +190,6 @@ export const MEXICAN_STATES = [
 export default {
   ROLES,
   ROLES_LABEL,
-  SPECIALTIES,
-  SPECIALTY_LABELS,
-  SPECIALTY_DESCRIPTIONS,
-  SPECIALTY_OPTIONS,
   ROUTES,
   SESSION_STATUS,
   SESSION_STATUS_LABEL,

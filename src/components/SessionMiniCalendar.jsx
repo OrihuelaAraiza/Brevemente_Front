@@ -69,17 +69,16 @@ export default function SessionMiniCalendar({
     }).format(visibleDate);
     const sessionsByDay = useMemo(() => {
         return sessions.reduce((acc, session) => {
-            const raw = session?.datetime || session?.scheduledAt || session?.time;
-            if (!raw) {
+            if (!session?.datetime) {
                 return acc;
             }
-
-            const key = toLocalDateKey(raw);
+            
+            const key = toLocalDateKey(session.datetime); 
 
             if (!key) {
                 return acc;
             }
-
+            
             acc[key] = acc[key] ? acc[key] + 1 : 1;
             return acc;
         }, {});

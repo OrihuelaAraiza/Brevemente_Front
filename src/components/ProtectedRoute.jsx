@@ -7,7 +7,6 @@ import { ROLES, ROUTES, resolveDestination } from "../utils/constants";
 import NavSidebar from "./NavSidebar";
 import PatientNavSidebar from "./PatientNavSidebar";
 import Topbar from "./Topbar";
-import AutoBreadcrumbs from "./AutoBreadcrumbs";
 
 export default function ProtectedRoute({ allow, children }) {
   const token = storage.getToken();
@@ -166,7 +165,6 @@ export default function ProtectedRoute({ allow, children }) {
           sidebarId={sidebarId}
           onToggleSidebar={toggleSidebar}
         />
-        <AutoBreadcrumbs />
         <main className="app-shell__content">
           {children ?? <Outlet context={outletContext} />}
         </main>

@@ -1,49 +1,104 @@
-import { api } from "./apiClient";
-import { setUser } from "./storage";
-
-/**
- * Devuelve el perfil del profesional logueado con URLs SAS frescas (30 min).
- * Usar este endpoint cuando se necesite mostrar fotos/galerías persistidas.
- */
-export async function getMyProfile() {
-  return api.get("/professional/profile").catch(() => null);
-}
+import { db, persist, uid, delay, nowIso } from "./mocks/db";
+import { getUser, setUser } from "./storage";
 
 export async function updateProfile(payload) {
-  const updated = await api.put("/professional/profile", payload);
-  // refrescar cache local
-  const user = updated?.user || updated;
-  if (user?.id) setUser(user);
-  return user;
+  await delay();
+  const user = getUser();
+  if (!user) {
+    const err = new Error("Sesión no iniciada.");
+    err.status = 401;
+    throw err;
+  }
+  if (payload?.newPassword && !payload?.currentPassword) {
+    const err = new Error("Se requiere contraseña actual.");
+    err.status = 400;
+    throw err;
+  }
+  const store = db();
+  const userRecord = store.users.find((u) => u.id === user.id);
+  if (!userRecord) {
+    const err = new Error("Usuario no encontrado.");
+    err.status = 404;
+    throw err;
+  }
+  if (payload?.currentPassword && userRecord.password !== payload.currentPassword) {
+    const err = new Error("Contraseña actual incorrecta.");
+    err.status = 401;
+    throw err;
+  }
+  const updates = { ...payload };
+  if (updates.newPassword) {
+    userRecord.password = updates.newPassword;
+  }
+  delete updates.newPassword;
+  delete updates.currentPassword;
+  Object.assign(userRecord, updates);
+  persist();
+  const publicUser = { ...userRecord };
+  delete publicUser.password;
+  setUser(publicUser);
+  return publicUser;
 }
 
 export async function listDelegates() {
-  return api.get("/delegates").catch(() => []);
+  await delay();
+  const store = db();
+  const user = getUser();
+  return store.delegates.filter((d) => !user || d.professionalId === user.id);
 }
 
 export async function createDelegate(email, password, name) {
-  return api.post("/delegates", { email, password, name });
+  await delay();
+  const store = db();
+  const user = getUser();
+  const trimmed = String(email || "").trim();
+  const fallbackName = trimmed.includes("@") ? trimmed.split("@")[0] : trimmed;
+  const delegate = {
+    id: uid("del"),
+    professionalId: user?.id || "prof_demo_1",
+    email: trimmed,
+    name: name || fallbackName,
+    createdAt: nowIso(),
+  };
+  store.delegates.push(delegate);
+  store.users.push({
+    id: delegate.id,
+    email: trimmed,
+    password,
+    name: delegate.name,
+    firstName: delegate.name,
+    lastName: "",
+    role: "ASSISTANT",
+    professionalId: delegate.professionalId,
+    verified: true,
+  });
+  persist();
+  return delegate;
 }
 
 export async function deleteDelegate(delegateId) {
-  return api.delete(`/delegates/${delegateId}`);
+  await delay();
+  const store = db();
+  store.delegates = store.delegates.filter((d) => d.id !== delegateId);
+  store.users = store.users.filter((u) => u.id !== delegateId);
+  persist();
+  return true;
 }
 
 export async function listAuditLog() {
-  return api.get("/audit/professional").catch(() => []);
+  await delay();
+  const store = db();
+  const user = getUser();
+  return store.auditLog.filter((a) => !user || a.userId === user.id);
 }
 
 export async function countDelegates() {
-  try {
-    const list = await listDelegates();
-    return Array.isArray(list) ? list.length : 0;
-  } catch {
-    return 0;
-  }
+  await delay(60);
+  const list = await listDelegates();
+  return list.length;
 }
 
 export default {
-  getMyProfile,
   updateProfile,
   listDelegates,
   createDelegate,

@@ -1,131 +1,189 @@
-import { api } from "./apiClient";
-import { canonicalize, sha256 } from "../utils/export/composeRecord";
+import { db, persist, uid, delay, nowIso } from "./mocks/db";
+import { getUser } from "./storage";
+import generateHistoryPdf from "../utils/export/pdf/historyPdf";
+import generateNotePdf from "../utils/export/pdf/notePdf";
 
-/**
- * Reportes contra klinia-api.
- *
- * Modelo unificado:
- *   { id, folio, patientId, professionalId, template, data, status,
- *     pdfHash, verificationCode, createdAt, updatedAt, signedAt }
- *
- * NOTA: PDF y bundle export se mantienen del lado del cliente con composeRecord
- * porque no hay endpoints equivalentes todavía en el backend.
- */
-
-export async function create(payload) {
-  if (payload?.patientId) {
-    return api.post(`/patients/${payload.patientId}/reports`, payload);
-  }
-  return api.post("/reports", payload);
+function ensurePatientId(patientId) {
+  const normalized = String(patientId || "").trim();
+  if (!normalized) throw new Error("Selecciona un paciente válido antes de continuar.");
+  return normalized;
 }
 
-export async function listAll(params = {}) {
-  const qs = new URLSearchParams();
-  Object.entries(params).forEach(([k, v]) => {
-    if (v !== undefined && v !== null && v !== "") qs.set(k, String(v));
-  });
-  const tail = qs.toString();
-  return api.get(`/reports${tail ? `?${tail}` : ""}`);
+function ensureId(id) {
+  const normalized = String(id || "").trim();
+  if (!normalized) throw new Error("Identificador de informe inválido.");
+  return normalized;
+}
+
+function nextFolio(prefix, store) {
+  const year = new Date().getFullYear();
+  const count =
+    store.reports.filter((r) => (r.folio || "").startsWith(`${prefix}-${year}`)).length + 1;
+  return `${prefix}-${year}-${String(count).padStart(4, "0")}`;
+}
+
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  URL.revokeObjectURL(url);
+}
+
+export async function create(payload) {
+  await delay();
+  const store = db();
+  const user = getUser();
+  const report = {
+    id: uid("rep"),
+    patientId: ensurePatientId(payload?.patientId),
+    professionalId: user?.id || "prof_demo_1",
+    folio: nextFolio("REP", store),
+    title: payload?.title || "Reporte",
+    content: payload?.content || "",
+    status: "DRAFT",
+    progress: 0,
+    createdAt: nowIso(),
+    ...payload,
+  };
+  store.reports.push(report);
+  persist();
+  return report;
 }
 
 export async function listByPatient(patientId) {
-  if (!patientId) return [];
-  return api.get(`/patients/${patientId}/reports`);
+  await delay();
+  const id = ensurePatientId(patientId);
+  const store = db();
+  return store.reports
+    .filter((r) => r.patientId === id)
+    .sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
 }
 
 export async function getOne(id) {
-  return api.get(`/reports/${id}`);
+  await delay();
+  const rid = ensureId(id);
+  const store = db();
+  const r = store.reports.find((x) => x.id === rid);
+  if (!r) {
+    const err = new Error("Reporte no encontrado.");
+    err.status = 404;
+    throw err;
+  }
+  return r;
 }
 
 export async function update(reportId, patch) {
-  return api.put(`/reports/${reportId}`, patch);
-}
-
-/**
- * Firma el reporte: pide al backend marcar como cerrado.
- * Si el backend no calcula hash, lo computamos aquí para mostrar el sello
- * (sigue siendo "demo only", como en la versión mock).
- */
-export async function sign(reportId) {
-  const report = await getOne(reportId).catch(() => null);
-  let pdfHash = report?.pdfHash;
-  if (!pdfHash && report) {
-    try {
-      const canonical = canonicalize(report.data || {});
-      pdfHash = await sha256(canonical);
-    } catch {
-      pdfHash = "";
-    }
+  await delay();
+  const rid = ensureId(reportId);
+  const store = db();
+  const idx = store.reports.findIndex((r) => r.id === rid);
+  if (idx === -1) {
+    const err = new Error("Reporte no encontrado.");
+    err.status = 404;
+    throw err;
   }
-  // Backend nombra al cierre "lock" (firma == cerrar el reporte para edición)
-  return api.post(`/reports/${reportId}/lock`, { pdfHash });
+  if (store.reports[idx].status === "LOCKED") {
+    const err = new Error("Reporte bloqueado.");
+    err.status = 409;
+    throw err;
+  }
+  store.reports[idx] = { ...store.reports[idx], ...patch, id: rid, updatedAt: nowIso() };
+  persist();
+  return store.reports[idx];
 }
 
-export const lock = sign;
+export async function lock(reportId) {
+  await delay();
+  const rid = ensureId(reportId);
+  const store = db();
+  const r = store.reports.find((x) => x.id === rid);
+  if (!r) {
+    const err = new Error("Reporte no encontrado.");
+    err.status = 404;
+    throw err;
+  }
+  r.status = "LOCKED";
+  r.lockedAt = nowIso();
+  r.progress = 100;
+  persist();
+  return r;
+}
 
-/**
- * Bundle/exports: lecturas multi-recurso del paciente.
- * Las dejamos como composición client-side reusando endpoints existentes,
- * para no esperar a que el backend tenga /export.
- */
-export async function fetchPatientBundle(patientId) {
-  if (!patientId) return null;
-  const [patient, history, notes, prescriptions, sessions, reports] = await Promise.all([
-    api.get(`/patients/${patientId}`).catch(() => null),
-    api.get(`/histories?patientId=${patientId}`).catch(() => null),
-    api.get(`/patients/${patientId}/notes`).catch(() => ({ items: [] })),
-    api.get(`/patients/${patientId}/prescriptions`).catch(() => []),
-    api.get(`/patients/${patientId}/sessions`).catch(() => ({ items: [] })),
-    api.get(`/patients/${patientId}/reports`).catch(() => []),
-  ]);
+export async function fetchPatientBundle(patientId, overrides = {}) {
+  await delay();
+  const id = ensurePatientId(patientId);
+  const store = db();
+  const patient = store.patients.find((p) => p.id === id) || overrides.patient;
+  if (!patient) {
+    throw new Error("Datos del paciente requeridos para exportar.");
+  }
   return {
     patient,
-    history: Array.isArray(history?.items) ? history.items[0] : history,
-    notes: notes?.items || notes || [],
-    prescriptions: Array.isArray(prescriptions) ? prescriptions : prescriptions?.items || [],
-    sessions: sessions?.items || sessions || [],
-    reports: Array.isArray(reports) ? reports : reports?.items || [],
+    history: store.histories[id] || overrides.history || null,
+    sessions: store.sessions.filter((s) => s.patientId === id),
+    prescriptions: store.prescriptions.filter((r) => r.patientId === id),
+    notes: store.notes.filter((n) => n.patientId === id),
+    consents: store.consents.filter((c) => c.patientId === id),
   };
 }
 
-export async function exportPatientRecordJson(patientId) {
-  const bundle = await fetchPatientBundle(patientId);
-  if (!bundle) return null;
-  const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `expediente-${patientId}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  return bundle;
+export async function exportPatientRecordJson(patientId, overrides = {}) {
+  const bundle = await fetchPatientBundle(patientId, overrides);
+  const { patient, history, sessions, prescriptions, notes, consents } = bundle;
+  const exportData = {
+    version: "1.0",
+    patientData: patient,
+    clinicalData: {
+      history: history || null,
+      sessions: sessions || [],
+      prescriptions: prescriptions || [],
+      notes: notes || [],
+      consents: consents || [],
+    },
+  };
+  const jsonStr = JSON.stringify(exportData, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json" });
+  const filename = `expediente_${patient.curp || patient.id}_${new Date().toISOString().split("T")[0]}.json`;
+  triggerDownload(blob, filename);
+  return blob;
 }
 
 export async function exportHistoryPdf(patientId, overrides = {}) {
-  // Usa downloadHistoryPdf que pasa por generateAndRegister: descarga + auto-registra
-  // en GeneratedDocument para que aparezca en docs del paciente.
-  const { downloadHistoryPdf } = await import("../utils/export/pdf/historyPdf");
-  const bundle = await fetchPatientBundle(patientId);
-  return downloadHistoryPdf({ ...bundle, ...overrides });
+  const { patient } = overrides;
+  if (!patient) throw new Error("Datos del paciente requeridos para exportar.");
+  const bundle = await fetchPatientBundle(patientId, overrides);
+  const blob = await generateHistoryPdf({
+    patient: bundle.patient,
+    history: bundle.history,
+    prescriptions: bundle.prescriptions,
+  });
+  const filename = `historia_${patient.curp || patient.id}_${new Date().toISOString().split("T")[0]}.pdf`;
+  triggerDownload(blob, filename);
+  return blob;
 }
 
 export async function exportNotePdf(patientId, note, overrides = {}) {
-  const { downloadNotePdf } = await import("../utils/export/pdf/notePdf");
-  return downloadNotePdf({ note, patientId, ...overrides });
+  const { patient } = overrides;
+  if (!patient) throw new Error("Datos del paciente requeridos para exportar.");
+  if (!note) throw new Error("Nota requerida para exportar.");
+  const blob = await generateNotePdf({ patient, note });
+  const filename = `nota_${note.id}_${new Date().toISOString().split("T")[0]}.pdf`;
+  triggerDownload(blob, filename);
+  return blob;
 }
 
 export default {
   create,
-  listAll,
   listByPatient,
   getOne,
   update,
-  sign,
   lock,
-  fetchPatientBundle,
   exportPatientRecordJson,
   exportHistoryPdf,
   exportNotePdf,
+  fetchPatientBundle,
 };

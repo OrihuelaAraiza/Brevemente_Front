@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import ButtonPrimary from "../components/ButtonPrimary";
 import AuthProviders from "../components/AuthProviders";
@@ -20,6 +20,7 @@ import {
 import { ROLES, ROUTES } from "../utils/constants";
 import { isValidEmail, isValidPassword } from "../utils/validators";
 import { useToast } from "../components/UI/Toast";
+import doctorImg from "../assets/hero/doctor-login.jpg";
 import Logo from "../components/Brand/Logo";
 const INITIAL_FORM = {
   email: "",
@@ -198,12 +199,12 @@ export default function Login() {
   const heroCopy =
     userType === "professional"
       ? {
-          title: "Portal Profesional",
-          subtitle: "Acceso al expediente, agenda y notas clínicas.",
+          title: "Portal Profesionales",
+          subtitle: "Gestiona tus consultas y pacientes.",
         }
       : {
-          title: "Portal Paciente",
-          subtitle: "Consulta tus sesiones, tareas y documentos.",
+          title: "Portal Pacientes",
+          subtitle: "Accede a tu historial y recetas.",
         };
 
   return (
@@ -256,7 +257,7 @@ export default function Login() {
               name="email"
               autoComplete="email"
               required
-              placeholder="tu@correo.com"
+              placeholder="profesional@brevemente.mx"
               error={errors.email}
             />
 
@@ -357,20 +358,17 @@ export default function Login() {
             </div>
           </form>
         </section>
-
         <Motion.aside
-          className="login-hero bm-login-hero"
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="login-hero"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <div className="bm-login-hero__inner">
-            <img
-              src="/psicolog.png"
-              alt="BreveMente — Salud mental"
-              className="login-hero__image bm-login-hero__image"
-            />
-          </div>
+          <img
+            src={doctorImg}
+            alt="Profesional de salud usando la plataforma BreveMente"
+            className="login-hero__image"
+          />
         </Motion.aside>
       </div>
     </div>

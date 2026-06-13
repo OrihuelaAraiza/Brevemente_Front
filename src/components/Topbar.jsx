@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "./UI/Button";
 import Modal from "./UI/Modal";
 import { ROLES, ROLES_LABEL } from "../utils/constants";
-import { getSpecialtyLabel } from "../utils/permissions";
 import ThemeToggle from "./ThemeToggle";
-import { useNavigate } from "react-router-dom";
-import { getPublicTherapist } from "../services/directoryService";
+import { Link, useNavigate } from "react-router-dom";
 
 function getInitials(name) {
   if (!name) return "U";
@@ -50,28 +48,9 @@ export default function Topbar({
 }) {
   const name = user?.name ?? "Usuario";
   const roleLabel = ROLES_LABEL[role] ?? role ?? "";
-  const specialtyLabel = getSpecialtyLabel(user);
-  const roleLine = specialtyLabel ? `${roleLabel} · ${specialtyLabel}` : roleLabel;
   const initials = getInitials(name);
   const [confirmLogoutOpen, setConfirmLogoutOpen] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
-  const [bossName, setBossName] = useState("");
-
-  // Cuando el usuario es asistente, resolvemos el nombre del profesional
-  // al que pertenece para mostrar el banner "actuando en nombre de".
-  const isAssistant = role === ROLES.ASSISTANT;
-  const bossId = user?.professionalId;
-  useEffect(() => {
-    if (!isAssistant || !bossId) {
-      setBossName("");
-      return;
-    }
-    let alive = true;
-    getPublicTherapist(bossId)
-      .then((t) => { if (alive && t?.name) setBossName(t.name); })
-      .catch(() => { if (alive) setBossName(""); });
-    return () => { alive = false; };
-  }, [isAssistant, bossId]);
 
   const openConfirmLogout = () => setConfirmLogoutOpen(true);
   const closeConfirmLogout = () => {
@@ -134,15 +113,9 @@ export default function Topbar({
         </Button>
         <div className="topbar__user">
           <p className="topbar__greeting">Hola, {name}</p>
-          {roleLine ? (
+          {roleLabel ? (
             <span className="topbar__role" aria-live="polite">
-              {roleLine}
-            </span>
-          ) : null}
-          {isAssistant ? (
-            <span className="topbar__on-behalf" title="Estás operando en nombre de tu profesional">
-              <span aria-hidden="true">⚭</span>
-              Operando en nombre de <strong>{bossName || "tu profesional"}</strong>
+              {roleLabel}
             </span>
           ) : null}
         </div>

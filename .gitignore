@@ -33,3 +33,8 @@ klinia-api/.env.local
 *.pdf
 *.doc
 *.docx
+
+# Credenciales / docs internos NO públicos
+usuario ftps.txt
+BreveMente - Guia*.pdf
+Maquetado de campos*.xlsx

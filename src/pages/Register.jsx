@@ -8,7 +8,6 @@ import StepContact from "../components/register/StepContact";
 import StepDocs from "../components/register/StepDocs";
 import StepFace from "../components/register/StepFace";
 import ButtonPrimary from "../components/ButtonPrimary";
-import DoodleScatter from "../components/DoodleScatter";
 import auditService from "../services/auditService";
 import registerService from "../services/registerService";
 import storage from "../services/storage";
@@ -27,7 +26,7 @@ import {
 import { useToast } from "../components/UI/Toast";
 import Logo from "../components/Brand/Logo";
 
-const DRAFT_STORAGE_KEY = "romimente.register.draft";
+const DRAFT_STORAGE_KEY = "brevemente.register.draft";
 const REGISTER_ASIDE_IMAGE = null;
 
 const STEP_FLOW = [
@@ -676,21 +675,20 @@ export default function Register() {
 
     return (
         <div className="register-page">
-            <DoodleScatter />
             <section className="register-main">
                 <header className="register-header">
                     <Logo
                         variant="horizontal"
                         size="lg"
                         theme="auto"
-                        alt="ROMI Paliativos"
+                        alt="BreveMente"
                         className="register-logo"
                     />
                     <div className="register-heading">
                         <h1>Registro profesional</h1>
                         <p>
                             Completa los pasos para habilitar tu acceso como profesional de
-                            la salud en ROMI Paliativos.
+                            la salud en BreveMente.
                         </p>
                     </div>
                 </header>

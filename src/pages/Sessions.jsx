@@ -79,7 +79,7 @@ function buildPreRegisteredPatientPayload(candidate = {}, professionalId = "") {
     const firstName = candidate.firstName?.trim() || "Paciente";
     const lastName = candidate.lastName?.trim() || "Por Registrar";
     const phone = candidate.phone?.trim() || "0000000000";
-    const fallbackEmail = `preregistro+${Date.now()}@romimente.local`;
+    const fallbackEmail = `preregistro+${Date.now()}@brevemente.local`;
 
     return {
         firstName,
@@ -130,7 +130,7 @@ export default function Sessions() {
     const professional = useMemo(
         () => ({
             id: professionalId,
-            name: user?.name || "Profesional ROMI Paliativos",
+            name: user?.name || "Profesional BreveMente",
             license: user?.license,
         }),
         [user, professionalId]
@@ -490,7 +490,7 @@ export default function Sessions() {
                                     onClick={() => setSelectedSessionId(session.id)}
                                 >
                                     <div className="sessions-today-card__time">
-                                        <span>{formatTime(session.datetime || session.scheduledAt || session.time)}</span>
+                                        <span>{formatTime(session.datetime)}</span>
                                         <Badge variant={badgeVariant}>{SESSION_STATUS_LABEL[session.status] || session.status}</Badge>
                                     </div>
                                     <h3 className="sessions-today-card__title">{getFullName(session)}</h3>
@@ -646,7 +646,7 @@ export default function Sessions() {
                                     className="cursor-pointer"
                                 >
                                     <td>
-                                        <p className="sessions-table__primary">{formatDateTime(session.datetime || session.scheduledAt || session.time)}</p>
+                                        <p className="sessions-table__primary">{formatDateTime(session.datetime)}</p>
                                         <p className="sessions-table__meta">{formatSessionModality(session)}</p>
                                     </td>
                                     <td>{patientFullName}</td>

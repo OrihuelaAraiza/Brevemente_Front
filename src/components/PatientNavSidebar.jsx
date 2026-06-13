@@ -79,7 +79,7 @@ export default function PatientNavSidebar({
           variant="horizontal"
           size="md"
           theme="dark"
-          alt="ROMI Paliativos"
+          alt="BreveMente"
           className="sidebar__logo"
         />
       </div>

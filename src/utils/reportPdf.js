@@ -80,7 +80,7 @@ export async function generateReportPdf({
     color: rgb(0.54, 0.79, 0.05),
   });
 
-  page.drawText("ROMI Tanatología y Cuidados Paliativos — Informe clínico", {
+  page.drawText("BreveMente — Informe clínico", {
     x: MARGIN,
     y: height - 35,
     font: fontBold,
@@ -112,7 +112,7 @@ export async function generateReportPdf({
     size: 13,
   });
   cursorY -= LINE;
-  page.drawText(`Nombre: ${professional?.name || "Profesional ROMI Tanatología y Cuidados Paliativos"}`, {
+  page.drawText(`Nombre: ${professional?.name || "Profesional BreveMente"}`, {
     x: MARGIN,
     y: cursorY,
     font: fontRegular,
@@ -159,7 +159,7 @@ export async function generateReportPdf({
   const hashFull = await sha256(canonicalize(hashPayload));
   const hashShort = hashFull.slice(0, 10).toUpperCase();
 
-  page.drawText("Documento generado digitalmente por ROMI Tanatología y Cuidados Paliativos.", {
+  page.drawText("Documento generado digitalmente por BreveMente.", {
     x: MARGIN,
     y: 60,
     font: fontRegular,
@@ -180,7 +180,7 @@ export async function generateReportPdf({
 
 export async function downloadReportPdf(config) {
   const blob = await generateReportPdf(config);
-  const filename = `informe_${config?.report?.folio || "romimente"}.pdf`;
+  const filename = `informe_${config?.report?.folio || "brevemente"}.pdf`;
   triggerDownload(blob, filename);
   return blob;
 }
