@@ -1,36 +1,48 @@
-import { db, persist, uid } from "./mocks/db";
-import { getUser } from "./storage";
+import { api } from "./apiClient";
 
-export async function logAudit(event, meta = {}) {
+const AUDIT_ENDPOINT = "/audit";
+
+export async function logAudit(event, meta = {}, options = {}) {
   if (!event) return;
+  const { auth = true, silent = false } = options;
+
   try {
-    const store = db();
-    const user = getUser();
-    store.auditLog.push({
-      id: uid("aud"),
-      event,
-      meta,
-      userId: user?.id || null,
-      at: new Date().toISOString(),
-    });
-    if (store.auditLog.length > 500) {
-      store.auditLog.splice(0, store.auditLog.length - 500);
+    await api.post(
+      AUDIT_ENDPOINT,
+      {
+        event,
+        meta,
+        at: new Date().toISOString(),
+      },
+      { auth, skipAuthError: true } // Don't clear session on 401 for audit logs
+    );
+  } catch (error) {
+    // Silently fail for audit errors - they're not critical and shouldn't break the app
+    // Only log in DEV mode for debugging, and skip warnings for common expected errors
+    if (import.meta.env.DEV && !silent) {
+      const isAuthError = error.status === 401 || error.message?.includes("Sesión expirada");
+      const isNotFound = error.status === 404;
+      const isLoginEvent = event?.includes("login") || event?.includes("auth_");
+      
+      // Skip warnings for expected errors during login/auth flow or when endpoint doesn't exist
+      if (!isAuthError && !isNotFound) {
+        console.debug("[audit-failed]", event, error.status, error.message);
+      }
     }
-    persist();
-  } catch {
-    /* silent */
+    // Always silently fail - audit logging should never break the application flow
   }
 }
 
 export async function getProfessionalLogs() {
-  const store = db();
-  const user = getUser();
-  return store.auditLog
-    .filter((a) => !user || a.userId === user.id)
-    .sort((a, b) => (b.at || "").localeCompare(a.at || ""));
+  try {
+    return await api.get(`${AUDIT_ENDPOINT}/professional`);
+  } catch (error) {
+    console.error("[audit-fetch-failed]", error.message);
+    throw error;
+  }
 }
 
 export default {
   logAudit,
-  getProfessionalLogs,
+  getProfessionalLogs, 
 };

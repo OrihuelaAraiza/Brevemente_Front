@@ -1,35 +1,21 @@
-import { db, persist, delay, nowIso } from "./mocks/db";
-import { getUser } from "./storage";
+import { api } from "./apiClient";
 
-export async function getHistory(patientId) {
-  await delay();
-  const store = db();
-  return store.histories[patientId] || null;
+export function getHistory(patientId, options = {}) {
+  return api.get(`/patients/${patientId}/history`, options);
 }
 
-export async function createHistory(patientId, payload) {
-  await delay();
-  const store = db();
-  const user = getUser();
-  const existing = store.histories[patientId] || {};
-  store.histories[patientId] = {
-    ...existing,
-    ...payload,
-    patientId,
-    professionalId: user?.id || existing.professionalId || "prof_demo_1",
-    updatedAt: nowIso(),
-    createdAt: existing.createdAt || nowIso(),
-  };
-  persist();
-  return store.histories[patientId];
+export function createHistory(patientId, payload, options = {}) {
+  return api.post(`/patients/${patientId}/history`, payload, options);
 }
 
+// src/services/historiesService.js
 export async function getHistoryForProfessional(patientId) {
-  return getHistory(patientId);
+  // El backend usará el token del terapeuta para saber quién pide la historia
+  return api.get(`/histories/patient/${patientId}`, { auth: true });
 }
 
 export default {
   getHistory,
   createHistory,
-  getHistoryForProfessional,
+  getHistoryForProfessional
 };
